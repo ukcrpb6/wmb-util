@@ -25,6 +25,70 @@
     <url>http://www.github.com/ukcrpb6/wmb-util</url>
   </scm>
 
+  <dependencies>
+    <!-- Message Broker -->
+    <dependency>
+      <groupId>com.ibm.broker</groupId>
+      <artifactId>javacompute</artifactId>
+      <version>${mqsi.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.broker</groupId>
+      <artifactId>jplugin2</artifactId>
+      <version>${mqsi.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.broker</groupId>
+      <artifactId>bipbroker</artifactId>
+      <version>${mqsi.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ibm.mq</groupId>
+      <artifactId>headers</artifactId>
+      <version>7.0.1.8</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Guava -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>12.0</version>
+    </dependency>
+
+    <!-- Unit tests -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.9</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pressassociation.bus</groupId>
+      <artifactId>wmb-mock</artifactId>
+      <version>1.0.1-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.9.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>ukcrpb6-maven-repository</id>
+      <url>https://github.com/ukcrpb6/maven-repository/raw/master</url>
+    </repository>
+  </repositories>
+
   <build>
     <plugins>
       <plugin>
@@ -65,61 +129,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <dependencies>
-    <!-- Message Broker -->
-    <dependency>
-      <groupId>com.ibm.broker</groupId>
-      <artifactId>javacompute</artifactId>
-      <version>8.0.0.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.ibm.broker</groupId>
-      <artifactId>jplugin2</artifactId>
-      <version>8.0.0.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.ibm.broker</groupId>
-      <artifactId>bipbroker</artifactId>
-      <version>8.0.0.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.ibm.mq</groupId>
-      <artifactId>headers</artifactId>
-      <version>7.0.1.8</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- Guava -->
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>12.0</version>
-    </dependency>
-
-    <!-- Unit tests -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.9</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.googlecode.wmbutil</groupId>
-      <artifactId>wmb-mock</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.9.0</version>
-    </dependency>
-  </dependencies>
 
 </project>

@@ -1,8 +1,11 @@
 package com.googlecode.wmbutil.messages;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.googlecode.wmbutil.NiceMbException;
+import com.googlecode.wmbutil.messages.factories.DefaultMbElementWrapperFactory;
+import com.googlecode.wmbutil.messages.factories.MbElementWrapperFactory;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
 
@@ -12,6 +15,8 @@ import static com.google.common.base.Preconditions.checkState;
  * @author Bob Browning <bob.browning@pressassociation.com>
  */
 public abstract class MbElementWrapper {
+
+    private static final MbElementWrapperFactory DEFAULT_ELEMENT_WRAPPER = new DefaultMbElementWrapperFactory();
 
     private MbElement wrappedElm;
 
@@ -25,6 +30,37 @@ public abstract class MbElementWrapper {
 
     public boolean isReadOnly() {
         return getMbElement().isReadOnly();
+    }
+
+    public Optional<MbElementWrapper> getField(String field) throws MbException {
+        return getField(field, DEFAULT_ELEMENT_WRAPPER, DefaultMbElementWrapper.class);
+    }
+
+    public Optional<MbElementWrapper> getField(String field,
+                                               final MbElementWrapperFactory factory,
+                                               final Class<? extends MbElementWrapper> adapterType) throws MbException {
+      return Optional.fromNullable(getMbElement().getFirstElementByPath(field)).transform(
+          new Function<MbElement, MbElementWrapper>() {
+            @Override public MbElementWrapper apply(MbElement input) {
+              return factory.getAdapter(input, adapterType);
+            }
+          });
+    }
+
+
+    public MbElementWrapper getOrCreateField(String field) throws MbException {
+      return getOrCreateField(field, DEFAULT_ELEMENT_WRAPPER, DefaultMbElementWrapper.class);
+    }
+
+    public MbElementWrapper getOrCreateField(String field,
+                                             MbElementWrapperFactory factory,
+                                             Class<? extends MbElementWrapper> adapterType) throws MbException {
+      Optional<MbElementWrapper> adapter = getField(field, factory, adapterType);
+      if(adapter.isPresent()) {
+        return adapter.get();
+      }
+      return factory.getAdapter(
+          getMbElement().createElementAsLastChild(MbElement.TYPE_UNKNOWN, field, null), adapterType);
     }
 
     public <T> T getValue(String field) throws MbException {

@@ -49,7 +49,7 @@ public class BlobPayload extends Payload {
     }
 
     /**
-     * Creates a payload as the last child, even if one already headerExistsIn
+     * Creates a payload as the last child, even if one already exists
      *
      * @param msg The message where to create a BLOB payload
      * @return A newly created BLOB payload
@@ -64,7 +64,7 @@ public class BlobPayload extends Payload {
     }
 
     /**
-     * Wraps or creates a payload as the last child, even if one already headerExistsIn
+     * Wraps or creates a payload as the last child, even if one already exists
      *
      * @param msg The message where to look for/create an XML payload
      * @return An BLOB payload, existent or newly created

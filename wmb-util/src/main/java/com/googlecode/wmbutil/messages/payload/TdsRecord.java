@@ -33,7 +33,7 @@ public class TdsRecord extends MbElementWrapper {
         super(wrappedElm);
     }
 
-    public Object getField(String name) throws MbException {
+    public Object getTdsField(String name) throws MbException {
         MbElement elm = getMbElement().getFirstElementByPath(name);
 
         if (elm != null) {
@@ -54,7 +54,7 @@ public class TdsRecord extends MbElementWrapper {
     }
 
     public String getStringField(String name) throws MbException {
-        Object o = getField(name);
+        Object o = getTdsField(name);
 
         if (o != null) {
             return o.toString();
@@ -64,44 +64,44 @@ public class TdsRecord extends MbElementWrapper {
     }
 
     public int getIntField(String name) throws MbException {
-        return ((Integer) getField(name)).intValue();
+        return ((Integer) getTdsField(name)).intValue();
     }
 
     public long getLongField(String name) throws MbException {
-        if (getField(name) instanceof Integer) {
-            return ((Integer) getField(name)).longValue();
+        if (getTdsField(name) instanceof Integer) {
+            return ((Integer) getTdsField(name)).longValue();
         } else {
-            return ((Long) getField(name)).longValue();
+            return ((Long) getTdsField(name)).longValue();
         }
     }
 
     public float getFloatField(String name) throws MbException {
-        if (getField(name) instanceof Integer) {
-            return ((Integer) getField(name)).floatValue();
+        if (getTdsField(name) instanceof Integer) {
+            return ((Integer) getTdsField(name)).floatValue();
         } else {
-            return ((Float) getField(name)).floatValue();
+            return ((Float) getTdsField(name)).floatValue();
         }
     }
 
     public double getDoubleValue(String name) throws MbException {
-        if (getField(name) instanceof Integer) {
-            return ((Integer) getField(name)).doubleValue();
+        if (getTdsField(name) instanceof Integer) {
+            return ((Integer) getTdsField(name)).doubleValue();
         } else {
-            return ((Double) getField(name)).doubleValue();
+            return ((Double) getTdsField(name)).doubleValue();
         }
     }
 
     public boolean getBooleanValue(String name) throws MbException {
-        return ((Boolean) getField(name)).booleanValue();
+        return ((Boolean) getTdsField(name)).booleanValue();
     }
 
     public Date getDateField(String name) throws MbException {
-        if (getField(name) instanceof MbTimestamp) {
-            return ((MbTimestamp) getField(name)).getTime();
-        } else if (getField(name) instanceof MbDate) {
-            return ((MbDate) getField(name)).getTime();
+        if (getTdsField(name) instanceof MbTimestamp) {
+            return ((MbTimestamp) getTdsField(name)).getTime();
+        } else if (getTdsField(name) instanceof MbDate) {
+            return ((MbDate) getTdsField(name)).getTime();
         } else {
-            return ((MbTime) getField(name)).getTime();
+            return ((MbTime) getTdsField(name)).getTime();
         }
     }
 

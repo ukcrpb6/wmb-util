@@ -93,7 +93,7 @@ public class EmailPayload extends Payload {
     }
 
     /**
-     * Creates an EmailPayload as the last child, even if one already headerExistsIn
+     * Creates an EmailPayload as the last child, even if one already exists
      *
      * @param msg The message where to create an Email payload
      * @return A newly created Email payload

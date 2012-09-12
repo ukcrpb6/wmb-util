@@ -51,7 +51,7 @@ public class XmlPayload extends Payload {
     }
 
     /**
-     * Creates an XMLNS payload as the last child, even if one already headerExistsIn
+     * Creates an XMLNS payload as the last child, even if one already exists
      *
      * @param msg The message where to create an XML payload
      * @return A newly created XML payload
@@ -62,7 +62,7 @@ public class XmlPayload extends Payload {
     }
 
     /**
-     * Creates a payload as the last child, even if one already headerExistsIn
+     * Creates a payload as the last child, even if one already exists
      *
      * @param msg    The message where to create an XML payload
      * @param parser Specifies the payload parser
@@ -75,7 +75,7 @@ public class XmlPayload extends Payload {
     }
 
     /**
-     * Wraps or creates a payload as the last child, even if one already headerExistsIn
+     * Wraps or creates a payload as the last child, even if one already exists
      *
      * @param msg The message where to look for/create an XML payload
      * @return An XML payload, existent or newly created
@@ -86,7 +86,7 @@ public class XmlPayload extends Payload {
     }
 
     /**
-     * Wraps or creates a payload as the last child, even if one already headerExistsIn
+     * Wraps or creates a payload as the last child, even if one already exists
      *
      * @param msg    The message where to look for/create an XML payload
      * @param parser Specifies the parser when creating a new payload
@@ -238,7 +238,7 @@ public class XmlPayload extends Payload {
     }
 
     /**
-     * Creates an XML declaration in the payload even if one headerExistsIn
+     * Creates an XML declaration in the payload even if one exists
      *
      * @param version    XML version
      * @param encoding   XML encoding

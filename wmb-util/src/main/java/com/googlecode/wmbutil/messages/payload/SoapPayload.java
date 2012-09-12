@@ -68,7 +68,7 @@ public class SoapPayload extends Payload {
     }
 
     /**
-     * Creates a payload as the last child, even if one already headerExistsIn
+     * Creates a payload as the last child, even if one already exists
      *
      * @param msg The message on which the payload should be created
      * @return The helper class
@@ -83,7 +83,7 @@ public class SoapPayload extends Payload {
     }
 
     /**
-     * Creates a payload as the last child, even if one already headerExistsIn
+     * Creates a payload as the last child, even if one already exists
      *
      * @param msg           The message on which the payload should be created
      * @param parser        The name of the parser to use, for example XMSNS or MRM
@@ -97,7 +97,7 @@ public class SoapPayload extends Payload {
     }
 
     /**
-     * Wraps if payload already headerExistsIn, of creates payload otherwise.
+     * Wraps if payload already exists, of creates payload otherwise.
      *
      * @param msg The message on which to wrap the payload
      * @return The helper class
@@ -108,7 +108,7 @@ public class SoapPayload extends Payload {
     }
 
     /**
-     * Wraps if payload already headerExistsIn, of creates payload otherwise.
+     * Wraps if payload already exists, of creates payload otherwise.
      *
      * @param msg    The message on which to wrap the payload
      * @param parser The name of the parser to use, for exampel XMSNS or MRM.
@@ -146,7 +146,7 @@ public class SoapPayload extends Payload {
      * Checks if the message has a payload of this type
      *
      * @param msg The message to check
-     * @return true if the payload headerExistsIn, false otherwise.
+     * @return true if the payload exists, false otherwise.
      * @throws MbException
      */
     public static boolean has(MbMessage msg) throws MbException {
