@@ -43,6 +43,7 @@
       <groupId>com.ibm.broker</groupId>
       <artifactId>bipbroker</artifactId>
       <version>${mqsi.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
