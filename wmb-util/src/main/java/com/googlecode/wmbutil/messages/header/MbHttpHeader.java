@@ -366,4 +366,8 @@ public interface MbHttpHeader extends MbHeader {
      */
     void setBasicAuthentication(String username, String password) throws MbException;
 
+    String getCustomHeader(String name) throws MbException;
+
+    void setCustomHeader(String name, String value) throws MbException;
+
 }

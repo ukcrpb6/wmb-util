@@ -269,5 +269,15 @@ public class MbHttpHeaderImpl extends AbstractMbHeader implements MbHttpHeader {
         }
     }
 
+    @Override
+    public String getCustomHeader(String name) throws MbException {
+        return getValue(name);
+    }
+
+    @Override
+    public void setCustomHeader(String name, String value) throws MbException {
+        setValue(name, value);
+    }
+
 }
 
