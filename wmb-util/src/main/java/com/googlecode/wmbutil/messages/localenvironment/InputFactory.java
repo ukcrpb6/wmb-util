@@ -1,8 +1,7 @@
 package com.googlecode.wmbutil.messages.localenvironment;
 
-import com.googlecode.wmbutil.messages.factories.ImmutableElementWrapperFactory;
 import com.googlecode.wmbutil.messages.MbElementWrapper;
-import com.googlecode.wmbutil.messages.localenvironment.input.FileInput;
+import com.googlecode.wmbutil.messages.factories.ImmutableElementWrapperFactory;
 import com.googlecode.wmbutil.messages.localenvironment.input.HttpInput;
 import com.ibm.broker.plugin.MbElement;
 
@@ -29,11 +28,7 @@ public abstract class InputFactory<T extends MbElementWrapper> extends Immutable
   };
   public static final InputFactory MQ = new DefaultInputFactory("MQ");
   public static final InputFactory JMS = new DefaultInputFactory("JMS");
-  public static final InputFactory<FileInput> FILE = new InputFactory<FileInput>("FILE") {
-    @Override protected FileInput createWrapper(MbElement element) {
-      return new FileInput(element);
-    }
-  };
+  public static final InputFactory FILE = new DefaultInputFactory("FILE");
   public static final InputFactory EMAIL = new DefaultInputFactory("Email");
   public static final InputFactory SOAP = new DefaultInputFactory("SOAP");
   public static final InputFactory TCPIP = new DefaultInputFactory("TCPIP");

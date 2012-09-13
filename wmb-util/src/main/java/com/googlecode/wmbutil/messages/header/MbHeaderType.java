@@ -15,10 +15,10 @@ public final class MbHeaderType {
 
     public static final MbHeaderType PROPERTIES = new MbHeaderType("PropertiesParser", "Properties");
 
-    public static final MbHeaderType MQMD = new MbHeaderType(MbMQMD.PARSER_NAME);
+    public static final MbHeaderType MQMD = new MbHeaderType(MbMQMD.PARSER_NAME, MbMQMD.ROOT_ELEMENT_NAME);
 
-    public static final MbHeaderType MQRFH2 = new MbHeaderType("MQRFH2");
-    public static final MbHeaderType MQRFH2C = new MbHeaderType(MbRFH2C.PARSER_NAME);
+    public static final MbHeaderType MQRFH2 = new MbHeaderType("MQHRFH2", "MQRFH2");
+    public static final MbHeaderType MQRFH2C = new MbHeaderType(MbRFH2C.PARSER_NAME, MbRFH2C.ROOT_ELEMENT_NAME);
 
     // HTTP Headers
     public static final MbHeaderType HTTP_INPUT = new MbHeaderType("WSINPHDR", "HTTPInputHeader");

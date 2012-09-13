@@ -2,8 +2,8 @@ package com.googlecode.wmbutil.messages.header;
 
 import com.google.common.base.Optional;
 import com.googlecode.wmbutil.CCSID;
-import com.googlecode.wmbutil.messages.MqFormat;
-import com.googlecode.wmbutil.messages.MqMessageType;
+import com.pressassociation.bus.mq.constants.MQFormat;
+import com.pressassociation.bus.mq.constants.MQMessageType;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbMessage;
@@ -56,10 +56,10 @@ public class HeaderFactories {
                     final MbMQMDHeader mqmd = super.createHeader(message);
                     mqmd.setVersion(2);
                     mqmd.setReport(0);
-                    mqmd.setFormat(MqFormat.MQFMT_STRING);
+                    mqmd.setFormat(MQFormat.MQFMT_STRING);
                     mqmd.setEncoding(546);
                     mqmd.setCodedCharSetId(CCSID.ASCII.getId());
-                    mqmd.setMsgType(MqMessageType.MQMT_DATAGRAM);
+                    mqmd.setMsgType(MQMessageType.MQMT_DATAGRAM);
                     mqmd.setExpiry(-1);
                     mqmd.setFeedback(0);
                     mqmd.setPriority(0);
@@ -103,7 +103,7 @@ public class HeaderFactories {
 
                     Optional<MbMQMDHeader> mqmd = MQMD_HEADER_FACTORY.tryGet(message);
                     if (mqmd.isPresent()) {
-                        mqmd.get().setFormat(MqFormat.MQFMT_RF_HEADER_2);
+                        mqmd.get().setFormat(MQFormat.MQFMT_RF_HEADER_2);
                         createdElement = mqmd.get().getMbElement().createElementAfter(getHeaderType().getParserName());
                     } else {
                         Optional<MbPropertiesHeader> properties = PROPERTIES_HEADER_FACTORY.tryGet(message);

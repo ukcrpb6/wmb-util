@@ -25,6 +25,7 @@ import com.googlecode.wmbutil.NiceMbException;
 import com.googlecode.wmbutil.messages.configuration.EmailAttachment;
 import com.googlecode.wmbutil.messages.configuration.EmailDestination;
 import com.googlecode.wmbutil.messages.configuration.TimeoutRequest;
+import com.googlecode.wmbutil.messages.localenvironment.DestinationElementWrapper;
 import com.googlecode.wmbutil.util.TypeSafetyHelper;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
@@ -42,6 +43,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class LocalEnvironment extends MbElementWrapper {
 
+    private static final String DESTINATION = "Destination";
+
     /**
      * Wrap an existing local environment message, note that this is not the
      * same {@link MbMessage} as the one containing your data
@@ -50,7 +53,7 @@ public class LocalEnvironment extends MbElementWrapper {
      * @return The wrapped message
      * @throws MbException
      */
-    public static Optional<LocalEnvironment> wrap(MbMessage msg) throws MbException {
+    public static Optional<LocalEnvironment> tryWrap(MbMessage msg) throws MbException {
         return Optional.fromNullable(checkNotNull(msg).getRootElement()).transform(
                 new Function<MbElement, LocalEnvironment>() {
                     @Override
@@ -60,14 +63,32 @@ public class LocalEnvironment extends MbElementWrapper {
                 });
     }
 
+    public static LocalEnvironment wrap(MbMessage msg) throws MbException {
+        return new LocalEnvironment(checkNotNull(msg).getRootElement());
+    }
+
     /**
      * Constructs a new LocalEnvironment wrapper
      *
      * @param elm The element to be wrapped
      * @throws MbException
      */
-    private LocalEnvironment(MbElement elm) {
+    public LocalEnvironment(MbElement elm) {
         super(elm);
+    }
+
+    // Destination Element
+
+    public DestinationElementWrapper getDestination() throws MbException {
+        return getField(DESTINATION, DestinationElementWrapper.class);
+    }
+
+    public DestinationElementWrapper getOrCreateDestination() throws MbException {
+        return getOrCreateField(DESTINATION, DestinationElementWrapper.class);
+    }
+
+    public Optional<DestinationElementWrapper> tryGetDestination() throws MbException {
+        return tryGetField(DESTINATION, DestinationElementWrapper.class);
     }
 
     /**

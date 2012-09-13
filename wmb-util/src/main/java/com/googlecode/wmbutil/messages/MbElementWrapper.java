@@ -3,11 +3,14 @@ package com.googlecode.wmbutil.messages;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
+import com.google.common.base.Throwables;
 import com.googlecode.wmbutil.NiceMbException;
-import com.googlecode.wmbutil.messages.factories.DefaultMbElementWrapperFactory;
-import com.googlecode.wmbutil.messages.factories.MbElementWrapperFactory;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.NoSuchElementException;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -16,11 +19,9 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public abstract class MbElementWrapper {
 
-    private static final MbElementWrapperFactory DEFAULT_ELEMENT_WRAPPER = new DefaultMbElementWrapperFactory();
-
     private MbElement wrappedElm;
 
-    public MbElementWrapper(MbElement elm) {
+    protected MbElementWrapper(MbElement elm) {
         this.wrappedElm = elm;
     }
 
@@ -32,35 +33,67 @@ public abstract class MbElementWrapper {
         return getMbElement().isReadOnly();
     }
 
-    public Optional<MbElementWrapper> getField(String field) throws MbException {
-        return getField(field, DEFAULT_ELEMENT_WRAPPER, DefaultMbElementWrapper.class);
+    private Constructor<? extends MbElementWrapper> getConstructor(Class<? extends MbElementWrapper> adapterClazz) {
+        try {
+            return adapterClazz.getConstructor(MbElement.class);
+        } catch (NoSuchMethodException e) {
+            throw Throwables.propagate(e);
+        }
     }
 
-    public Optional<MbElementWrapper> getField(String field,
-                                               final MbElementWrapperFactory factory,
-                                               final Class<? extends MbElementWrapper> adapterType) throws MbException {
+    @SuppressWarnings("unchecked")
+    private <T extends MbElementWrapper> T getAdapter(Object adaptable, Class<T> adapterType) {
+        try {
+            return (T) getConstructor(adapterType).newInstance(adaptable);
+        } catch (InstantiationException e) {
+            throw Throwables.propagate(e);
+        } catch (IllegalAccessException e) {
+            throw Throwables.propagate(e);
+        } catch (InvocationTargetException e) {
+            throw Throwables.propagate(e);
+        }
+    }
+
+    // Candidate for lazy loading
+    public DefaultMbElementWrapper getField(String field) throws MbException {
+        return getField(field, DefaultMbElementWrapper.class);
+    }
+
+    // Candidate for lazy loading
+    public <T extends MbElementWrapper> T getField(String field, final Class<T> adapterType) throws MbException {
+        Optional<T> f = tryGetField(field, adapterType);
+        if(f.isPresent()) {
+            return f.get();
+        }
+        throw new NoSuchElementException("Could not find field [" + field + "]");
+    }
+
+    // Candidate for lazy loading
+    public Optional<DefaultMbElementWrapper> tryGetField(String field) throws MbException {
+        return tryGetField(field, DefaultMbElementWrapper.class);
+    }
+
+    // Candidate for lazy loading
+    public <T extends MbElementWrapper> Optional<T> tryGetField(
+            String field, final Class<T> adapterType) throws MbException {
       return Optional.fromNullable(getMbElement().getFirstElementByPath(field)).transform(
-          new Function<MbElement, MbElementWrapper>() {
-            @Override public MbElementWrapper apply(MbElement input) {
-              return factory.getAdapter(input, adapterType);
+          new Function<MbElement, T>() {
+            @Override public T apply(MbElement input) {
+              return getAdapter(input, adapterType);
             }
           });
     }
 
-
     public MbElementWrapper getOrCreateField(String field) throws MbException {
-      return getOrCreateField(field, DEFAULT_ELEMENT_WRAPPER, DefaultMbElementWrapper.class);
+      return getOrCreateField(field, DefaultMbElementWrapper.class);
     }
 
-    public MbElementWrapper getOrCreateField(String field,
-                                             MbElementWrapperFactory factory,
-                                             Class<? extends MbElementWrapper> adapterType) throws MbException {
-      Optional<MbElementWrapper> adapter = getField(field, factory, adapterType);
+    public <T extends MbElementWrapper> T getOrCreateField(String field, Class<T> adapterType) throws MbException {
+      Optional<T> adapter = tryGetField(field, adapterType);
       if(adapter.isPresent()) {
         return adapter.get();
       }
-      return factory.getAdapter(
-          getMbElement().createElementAsLastChild(MbElement.TYPE_UNKNOWN, field, null), adapterType);
+      return getAdapter(getMbElement().createElementAsLastChild(MbElement.TYPE_UNKNOWN, field, null), adapterType);
     }
 
     public <T> T getValue(String field) throws MbException {

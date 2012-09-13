@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.wmbutil.CCSID;
+import com.googlecode.wmbutil.messages.DefaultMbElementWrapper;
 import com.googlecode.wmbutil.messages.MbElementWrapper;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
@@ -107,7 +108,7 @@ public class HttpDestination extends MbElementWrapper {
   }
 
   public String getRequestURI() throws MbException {
-    Optional<MbElementWrapper> field = getField(REQUEST_LINE);
+    Optional<DefaultMbElementWrapper> field = tryGetField(REQUEST_LINE);
     if(field.isPresent()) {
       return field.get().getValue("RequestURI");
     }
@@ -115,7 +116,7 @@ public class HttpDestination extends MbElementWrapper {
   }
 
   public String getHttpVersion() throws MbException {
-    Optional<MbElementWrapper> field = getField(REQUEST_LINE);
+    Optional<DefaultMbElementWrapper> field = tryGetField(REQUEST_LINE);
     if(field.isPresent()) {
       return field.get().getValue("HTTPVersion");
     }
@@ -127,7 +128,7 @@ public class HttpDestination extends MbElementWrapper {
   }
 
   public String getMethod() throws MbException {
-    Optional<MbElementWrapper> field = getField(REQUEST_LINE);
+    Optional<DefaultMbElementWrapper> field = tryGetField(REQUEST_LINE);
     if(field.isPresent()) {
       return field.get().getValue("Method");
     }
@@ -157,7 +158,7 @@ public class HttpDestination extends MbElementWrapper {
   }
 
   public Map<String, String> getQueryString() throws MbException {
-    Optional<MbElementWrapper> field = getField(QUERY_STRING);
+    Optional<DefaultMbElementWrapper> field = tryGetField(QUERY_STRING);
     if(field.isPresent()) {
       final MbElement firstChild = field.get().getMbElement().getFirstChild();
       if(firstChild != null) {
