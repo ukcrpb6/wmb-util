@@ -108,6 +108,15 @@ public abstract class MbElementWrapper {
         }
     }
 
+    public <T> Optional<T> tryGetValue(String field) throws MbException {
+        MbElement elm = getMbElement().getFirstElementByPath(field);
+        if (elm != null) {
+            //noinspection unchecked
+            return Optional.fromNullable((T) elm.getValue());
+        }
+        return Optional.absent();
+    }
+
     /**
      * Gets the value
      *
