@@ -30,13 +30,34 @@ import static org.mockito.Mockito.*;
 @MockPolicy(MbMockPolicy.class)
 public class MbElementWrapperTestCase {
 
+    private MbMessage message;
+
     @Mock private MbElement element;
 
     private MbElementWrapper wrapper;
 
     @Before
     public void setUp() throws Exception {
+        message = new MbMessage();
+        element = spy(message.getRootElement());
         wrapper = new DefaultMbElementWrapper(element);
+    }
+
+    @Test
+    public void testGetValue() throws Exception {
+        Assert.assertFalse(wrapper.getValue().isPresent());
+        wrapper.setValue("value");
+        verify(element).setValue("value");
+        Assert.assertTrue(wrapper.getValue().isPresent());
+        Assert.assertEquals("value", wrapper.getValue().get());
+    }
+
+    @Test
+    public void testGetFieldValue() throws Exception {
+        Assert.assertNotNull(wrapper.getValue("field"));
+        wrapper.setValue("field", "value");
+        Assert.assertNotNull(wrapper.getValue("field"));
+        Assert.assertEquals("value", wrapper.getValue("field"));
     }
 
     @Test(expected = IllegalStateException.class)
@@ -69,8 +90,7 @@ public class MbElementWrapperTestCase {
     @Test
     public void testSetMissingFieldValue() throws Exception {
         MbElement child = mock(MbElement.class);
-        when(element.getFirstElementByPath("field")).thenReturn(null);
-        when(element.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "field", null)).thenReturn(child);
+        doReturn(child).when(element).createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "field", null);
         wrapper.setValue("field", "value");
         verify(element).getFirstElementByPath("field");
         verify(element).createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "field", null);
@@ -86,7 +106,6 @@ public class MbElementWrapperTestCase {
 
     @Test
     public void testCreateDestinationFactory() throws Exception {
-        MbMessage message = new MbMessage();
         Assert.assertNull(DestinationFactory.HTTP.tryGet(message).orNull());
 
         HttpDestination httpDestination = DestinationFactory.HTTP.getOrCreateElement(message);
@@ -105,7 +124,6 @@ public class MbElementWrapperTestCase {
 
     @Test
     public void testRemoveDestinationFactory() throws Exception {
-        MbMessage message = new MbMessage();
         message.getRootElement().evaluateXPath("?Destination/?HTTP/?RequestURL");
         Assert.assertNotNull(DestinationFactory.HTTP.tryGet(message).orNull());
         DestinationFactory.HTTP.remove(message);
@@ -114,8 +132,9 @@ public class MbElementWrapperTestCase {
 
     @Test
     public void testDestination() throws Exception {
-        MbMessage message = new MbMessage();
+        @SuppressWarnings("unchecked")
         List<MbElement> element = (List<MbElement>) message.getRootElement().evaluateXPath("?Destination/?HTTP/?RequestURL");
+
         element.get(0).setValue("http://a/b/c");
 
         Optional<HttpDestination> destination = LocalEnvironment.wrap(message).getDestination().getHTTP();
