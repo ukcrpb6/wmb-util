@@ -1,9 +1,6 @@
 package com.googlecode.wmbutil.messages;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Strings;
-import com.google.common.base.Throwables;
+import com.google.common.base.*;
 import com.googlecode.wmbutil.NiceMbException;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
@@ -24,7 +21,7 @@ public abstract class MbElementWrapper {
     private MbElement wrappedElm;
 
     protected MbElementWrapper(MbElement elm) {
-        this.wrappedElm = elm;
+        this.wrappedElm = Preconditions.checkNotNull(elm, "Cannot wrap a null element");
     }
 
     public MbElement getMbElement() {
