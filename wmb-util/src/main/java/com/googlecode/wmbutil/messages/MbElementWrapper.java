@@ -15,6 +15,8 @@ import java.util.NoSuchElementException;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
+ * TODO: extract interface
+ *
  * @author Bob Browning <bob.browning@pressassociation.com>
  */
 public abstract class MbElementWrapper {
