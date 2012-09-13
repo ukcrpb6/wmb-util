@@ -35,7 +35,7 @@ public class TdsPayload extends Payload {
      * Wrap an message containing a flat file message with the helper class.
      * Automatically locates the MRM tree.
      *
-     * @param msg      The message to wrap.
+     * @param msg The message to wrap.
      * @return The helper class
      * @throws MbException
      */
@@ -122,7 +122,7 @@ public class TdsPayload extends Payload {
     /**
      * Class constructor
      *
-     * @param elm      The message element
+     * @param elm The message element
      * @throws MbException
      */
     private TdsPayload(MbElement elm) throws MbException {

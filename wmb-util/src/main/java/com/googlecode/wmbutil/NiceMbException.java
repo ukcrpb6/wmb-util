@@ -15,9 +15,6 @@
  */
 package com.googlecode.wmbutil;
 
-import com.google.common.base.Preconditions;
-import com.ibm.broker.plugin.MbJavaException;
-import com.ibm.broker.plugin.MbMessageAssembly;
 import com.ibm.broker.plugin.MbUserException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -44,7 +41,7 @@ public class NiceMbException extends MbUserException {
 
     public static NiceMbException propagate(Throwable t) {
         //noinspection ThrowableResultOfMethodCallIgnored
-        if(checkNotNull(t).getStackTrace() != null && t.getStackTrace().length > 0) {
+        if (checkNotNull(t).getStackTrace() != null && t.getStackTrace().length > 0) {
             StackTraceElement st = t.getStackTrace()[0];
             return new NiceMbException(st, t.getMessage());
         }

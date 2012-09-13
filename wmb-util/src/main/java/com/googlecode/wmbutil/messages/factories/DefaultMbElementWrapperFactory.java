@@ -15,16 +15,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class DefaultMbElementWrapperFactory implements MbElementWrapperFactory {
 
-  @Override
-  @SuppressWarnings("unchecked")
-  public <T extends MbElementWrapper> T getAdapter(MbElement adaptable, Class<T> adapterType) {
-    checkArgument(DefaultMbElementWrapper.class.equals(adapterType), "Adapter only supports " + getAdapterList());
-    return (T) new DefaultMbElementWrapper(checkNotNull(adaptable));
-  }
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends MbElementWrapper> T getAdapter(MbElement adaptable, Class<T> adapterType) {
+        checkArgument(DefaultMbElementWrapper.class.equals(adapterType), "Adapter only supports " + getAdapterList());
+        return (T) new DefaultMbElementWrapper(checkNotNull(adaptable));
+    }
 
-  @Override
-  public List<Class<? extends MbElementWrapper>> getAdapterList() {
-    return ImmutableList.<Class<? extends MbElementWrapper>>of(DefaultMbElementWrapper.class);
-  }
+    @Override
+    public List<Class<? extends MbElementWrapper>> getAdapterList() {
+        return ImmutableList.<Class<? extends MbElementWrapper>>of(DefaultMbElementWrapper.class);
+    }
 
 }

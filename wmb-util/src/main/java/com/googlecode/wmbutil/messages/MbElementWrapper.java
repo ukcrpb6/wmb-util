@@ -64,7 +64,7 @@ public abstract class MbElementWrapper {
     // Candidate for lazy loading
     public <T extends MbElementWrapper> T getField(String field, final Class<T> adapterType) throws MbException {
         Optional<T> f = tryGetField(field, adapterType);
-        if(f.isPresent()) {
+        if (f.isPresent()) {
             return f.get();
         }
         throw new NoSuchElementException("Could not find field [" + field + "]");
@@ -78,24 +78,24 @@ public abstract class MbElementWrapper {
     // Candidate for lazy loading
     public <T extends MbElementWrapper> Optional<T> tryGetField(
             String field, final Class<T> adapterType) throws MbException {
-      return Optional.fromNullable(getMbElement().getFirstElementByPath(field)).transform(
-          new Function<MbElement, T>() {
-            @Override public T apply(MbElement input) {
-              return getAdapter(input, adapterType);
-            }
-          });
+        return Optional.fromNullable(getMbElement().getFirstElementByPath(field)).transform(
+                new Function<MbElement, T>() {
+                    @Override public T apply(MbElement input) {
+                        return getAdapter(input, adapterType);
+                    }
+                });
     }
 
     public MbElementWrapper getOrCreateField(String field) throws MbException {
-      return getOrCreateField(field, DefaultMbElementWrapper.class);
+        return getOrCreateField(field, DefaultMbElementWrapper.class);
     }
 
     public <T extends MbElementWrapper> T getOrCreateField(String field, Class<T> adapterType) throws MbException {
-      Optional<T> adapter = tryGetField(field, adapterType);
-      if(adapter.isPresent()) {
-        return adapter.get();
-      }
-      return getAdapter(getMbElement().createElementAsLastChild(MbElement.TYPE_UNKNOWN, field, null), adapterType);
+        Optional<T> adapter = tryGetField(field, adapterType);
+        if (adapter.isPresent()) {
+            return adapter.get();
+        }
+        return getAdapter(getMbElement().createElementAsLastChild(MbElement.TYPE_UNKNOWN, field, null), adapterType);
     }
 
     public <T> T getValue(String field) throws MbException {
@@ -153,8 +153,8 @@ public abstract class MbElementWrapper {
     /**
      * Sets a fixed length padded value on the specified field
      *
-     * @param field The field to be set
-     * @param value The value to be set
+     * @param field  The field to be set
+     * @param value  The value to be set
      * @param length The fixed length of the String value
      * @throws MbException Invalid length for fixed length string
      */

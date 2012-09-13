@@ -65,9 +65,9 @@ public class XPathIterator extends ForwardingIterator<MbElement> {
                 return new AbstractIterator<MbElement>() {
                     @Override
                     protected MbElement computeNext() {
-                        while(iterator.hasNext()) {
+                        while (iterator.hasNext()) {
                             Object o = iterator.next();
-                            if(o != null && o instanceof MbElement) {
+                            if (o != null && o instanceof MbElement) {
                                 return (MbElement) o;
                             }
                         }

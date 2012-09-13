@@ -16,7 +16,10 @@
 
 package com.googlecode.wmbutil.util;
 
-import com.ibm.broker.plugin.*;
+import com.ibm.broker.plugin.MbElement;
+import com.ibm.broker.plugin.MbException;
+import com.ibm.broker.plugin.MbXMLNS;
+import com.ibm.broker.plugin.MbXMLNSC;
 
 public class XmlUtil {
 

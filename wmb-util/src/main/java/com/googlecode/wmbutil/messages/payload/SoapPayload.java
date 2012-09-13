@@ -49,7 +49,7 @@ public class SoapPayload extends Payload {
      * Wrap an message containing a SOAP message with the helper class.
      * Automatically locates the XML tree.
      *
-     * @param msg      The message to wrap.
+     * @param msg The message to wrap.
      * @return The helper class
      * @throws MbException
      */

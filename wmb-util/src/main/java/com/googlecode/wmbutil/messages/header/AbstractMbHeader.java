@@ -16,7 +16,7 @@ public abstract class AbstractMbHeader extends MbElementWrapper implements MbHea
     /**
      * Constructor defining the header with the specific element.
      *
-     * @param elm      The message element
+     * @param elm The message element
      * @throws MbException
      */
     public AbstractMbHeader(MbElement elm, MbHeaderType type) throws MbException {

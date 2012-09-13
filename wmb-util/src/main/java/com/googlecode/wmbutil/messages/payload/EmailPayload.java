@@ -107,7 +107,7 @@ public class EmailPayload extends Payload {
     /**
      * Class constructor
      *
-     * @param elm      Root element of message
+     * @param elm Root element of message
      * @throws MbException
      */
     private EmailPayload(MbElement elm) throws MbException {

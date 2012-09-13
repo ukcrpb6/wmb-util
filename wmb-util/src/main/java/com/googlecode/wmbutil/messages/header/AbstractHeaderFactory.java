@@ -40,7 +40,7 @@ public abstract class AbstractHeaderFactory<T extends MbHeader> {
     protected T createHeader(MbMessage message) throws MbException {
         MbElement element = message.getRootElement().getLastChild();
         String parserClassName = element.getParserClassName().toUpperCase();
-        if(bodyParserClasses.contains(parserClassName)) {
+        if (bodyParserClasses.contains(parserClassName)) {
             return getHeader(element.createElementBefore(getHeaderType().getParserName()));
         }
         return getHeader(message.getRootElement().createElementAsLastChild(getHeaderType().getParserName()));
@@ -92,7 +92,7 @@ public abstract class AbstractHeaderFactory<T extends MbHeader> {
      */
     public T remove(MbMessage msg) throws MbException {
         Optional<T> element = tryRemove(msg);
-        if(element.isPresent()) {
+        if (element.isPresent()) {
             return element.get();
         }
         throw new NiceMbException(getHeaderType() + " does not exist");

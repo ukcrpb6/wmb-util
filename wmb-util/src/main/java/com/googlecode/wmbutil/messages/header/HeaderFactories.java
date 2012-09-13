@@ -2,11 +2,11 @@ package com.googlecode.wmbutil.messages.header;
 
 import com.google.common.base.Optional;
 import com.googlecode.wmbutil.CCSID;
-import com.pressassociation.bus.mq.constants.MQFormat;
-import com.pressassociation.bus.mq.constants.MQMessageType;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbMessage;
+import com.pressassociation.bus.mq.constants.MQFormat;
+import com.pressassociation.bus.mq.constants.MQMessageType;
 
 /**
  * @author Bob Browning <bob.browning@pressassociation.com>

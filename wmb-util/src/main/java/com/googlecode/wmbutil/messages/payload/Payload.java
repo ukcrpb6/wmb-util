@@ -28,7 +28,7 @@ public abstract class Payload extends MbElementWrapper {
     /**
      * Constructor defining the payload with the specific element.
      *
-     * @param elm      The message element.
+     * @param elm The message element.
      * @throws MbException
      */
     public Payload(MbElement elm) throws MbException {

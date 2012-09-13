@@ -34,7 +34,7 @@ public class BlobPayload extends Payload {
     /**
      * Wraps a payload
      *
-     * @param msg      The message containing the BLOB payload
+     * @param msg The message containing the BLOB payload
      * @return The BLOB payload found in the message
      * @throws MbException
      */
@@ -123,7 +123,7 @@ public class BlobPayload extends Payload {
     /**
      * Class constructor
      *
-     * @param elm      The message element
+     * @param elm The message element
      * @throws MbException
      */
     private BlobPayload(MbElement elm) throws MbException {

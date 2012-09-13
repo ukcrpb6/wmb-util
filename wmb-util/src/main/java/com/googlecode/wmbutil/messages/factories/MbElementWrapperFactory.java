@@ -9,6 +9,7 @@ import java.util.List;
  * @author Bob Browning <bob.browning@pressassociation.com>
  */
 public interface MbElementWrapperFactory {
-  <T extends MbElementWrapper> T getAdapter(MbElement adaptable, Class<T> adapterType);
-  List<Class<? extends MbElementWrapper>> getAdapterList();
+    <T extends MbElementWrapper> T getAdapter(MbElement adaptable, Class<T> adapterType);
+
+    List<Class<? extends MbElementWrapper>> getAdapterList();
 }
