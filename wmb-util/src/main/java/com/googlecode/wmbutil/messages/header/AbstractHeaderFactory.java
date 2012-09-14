@@ -69,9 +69,8 @@ public abstract class AbstractHeaderFactory<T extends MbHeader> {
     }
 
     public T getOrCreate(final MbMessage msg) throws MbException {
-        System.out.println("Damn");
         Optional<T> wrapped = tryGet(msg);
-        return (wrapped.isPresent()) ? wrapped.get() : create(msg);
+        return wrapped.isPresent() ? wrapped.get() : createHeader(msg);
     }
 
     public Optional<T> tryRemove(MbMessage msg) throws MbException {
