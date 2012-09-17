@@ -39,9 +39,11 @@ public abstract class AbstractHeaderFactory<T extends MbHeader> {
 
     protected T createHeader(MbMessage message) throws MbException {
         MbElement element = message.getRootElement().getLastChild();
-        String parserClassName = element.getParserClassName().toUpperCase();
-        if (bodyParserClasses.contains(parserClassName)) {
-            return getHeader(element.createElementBefore(getHeaderType().getParserName()));
+        if(element != null) {
+            String parserClassName = element.getParserClassName().toUpperCase();
+            if (bodyParserClasses.contains(parserClassName)) {
+                return getHeader(element.createElementBefore(getHeaderType().getParserName()));
+            }
         }
         return getHeader(message.getRootElement().createElementAsLastChild(getHeaderType().getParserName()));
     }
