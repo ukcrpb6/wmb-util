@@ -1,7 +1,9 @@
 package com.googlecode.wmbutil;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.googlecode.wmbutil.messages.DefaultMbElementWrapper;
 import com.googlecode.wmbutil.messages.LocalEnvironment;
 import com.googlecode.wmbutil.messages.MbElementWrapper;
@@ -9,6 +11,8 @@ import com.googlecode.wmbutil.messages.localenvironment.DestinationFactory;
 import com.googlecode.wmbutil.messages.localenvironment.destination.HttpDestination;
 import com.ibm.broker.plugin.*;
 import com.ibm.broker.plugin.visitor.DefaultMbMessageVisitor;
+import com.pressassociation.bus.messages.Destination;
+import com.pressassociation.bus.data.KeyedProxy;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
@@ -41,6 +45,26 @@ public class MbElementWrapperTestCase {
         message = new MbMessage();
         element = spy(message.getRootElement());
         wrapper = new DefaultMbElementWrapper(element);
+    }
+
+    @Test
+    public void testGenericDataParser() throws Exception {
+        com.pressassociation.bus.messages.LocalEnvironment environment =
+                KeyedProxy.createProxy(message, com.pressassociation.bus.messages.LocalEnvironment.class);
+        Destination destination = environment.getDestination();
+        destination.toString();
+        destination.getHttp().setCompression("gzip");
+        destination.getHttp().setQueryStringCCSID(CCSID.ASCII.getId());
+        destination.getHttp().setKeepAlive(true);
+        destination.getHttp().setRequestIdentifier("abcdef".getBytes());
+
+        KeyedProxy.createProxy(message, com.pressassociation.bus.messages.HttpDestination.class).setQueryString(ImmutableMap.of("x", "y"));
+        KeyedProxy.createProxy(message, com.pressassociation.bus.messages.HttpDestination.class).setQueryString(ImmutableMap.of("a", "b"));
+        KeyedProxy.createProxy(message, com.pressassociation.bus.messages.HttpDestination.class).setTimeout(ImmutableList.of(1L, 2L, 3L));
+
+        Assert.assertNotNull(destination.getHttp().getQueryString());
+        Assert.assertEquals(1, destination.getHttp().getQueryString().size());
+        Assert.assertEquals("b", destination.getHttp().getQueryString().get("a"));
     }
 
     @Test
