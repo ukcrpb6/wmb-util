@@ -16,9 +16,23 @@
 
 package com.googlecode.wmbutil.util;
 
+import com.google.common.collect.ImmutableMap;
 import com.ibm.broker.plugin.*;
 
 public class ElementUtil {
+
+    public static ImmutableMap<String, Object> asImmutableMap(MbElement parent) throws MbException {
+        MbElement child = parent.getFirstChild();
+
+        ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
+        while (child != null) {
+            if (child.getType() == MbElement.TYPE_NAME_VALUE) {
+                builder.put(child.getName(), child.getValue());
+            }
+            child = child.getNextSibling();
+        }
+        return builder.build();
+    }
 
     public static Object copyValue(MbElement inElm, String inXpath, MbElement outElm, String outXpath) throws MbException {
         Object value = inElm.getFirstElementByPath(inXpath).getValue();
