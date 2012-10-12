@@ -2,8 +2,8 @@ package com.googlecode.wmbutil;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.googlecode.wmbutil.messages.DefaultMbElementWrapper;
 import com.googlecode.wmbutil.messages.LocalEnvironment;
 import com.googlecode.wmbutil.messages.MbElementWrapper;
@@ -11,8 +11,8 @@ import com.googlecode.wmbutil.messages.localenvironment.DestinationFactory;
 import com.googlecode.wmbutil.messages.localenvironment.destination.HttpDestination;
 import com.ibm.broker.plugin.*;
 import com.ibm.broker.plugin.visitor.DefaultMbMessageVisitor;
-import com.pressassociation.bus.messages.Destination;
-import com.pressassociation.bus.data.KeyedProxy;
+import com.pressassociation.bus.data.KeyedProxyFactory;
+import com.pressassociation.bus.messages.elements.Destination;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
@@ -22,8 +22,8 @@ import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.MockPolicy;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
@@ -50,7 +50,7 @@ public class MbElementWrapperTestCase {
     @Test
     public void testGenericDataParser() throws Exception {
         com.pressassociation.bus.messages.LocalEnvironment environment =
-                KeyedProxy.createProxy(message, com.pressassociation.bus.messages.LocalEnvironment.class);
+                KeyedProxyFactory.create(message, com.pressassociation.bus.messages.LocalEnvironment.class);
         Destination destination = environment.getDestination();
         destination.toString();
         destination.getHttp().setCompression("gzip");
@@ -58,13 +58,19 @@ public class MbElementWrapperTestCase {
         destination.getHttp().setKeepAlive(true);
         destination.getHttp().setRequestIdentifier("abcdef".getBytes());
 
-        KeyedProxy.createProxy(message, com.pressassociation.bus.messages.HttpDestination.class).setQueryString(ImmutableMap.of("x", "y"));
-        KeyedProxy.createProxy(message, com.pressassociation.bus.messages.HttpDestination.class).setQueryString(ImmutableMap.of("a", "b"));
-        KeyedProxy.createProxy(message, com.pressassociation.bus.messages.HttpDestination.class).setTimeout(ImmutableList.of(1L, 2L, 3L));
+        KeyedProxyFactory.create(message, com.pressassociation.bus.messages.elements.HttpDestination.class).setQueryString(ImmutableMultimap.of("x", "y"));
+        KeyedProxyFactory.create(message, com.pressassociation.bus.messages.elements.HttpDestination.class).setQueryString(ImmutableMultimap.of("a", "b"));
+        KeyedProxyFactory.create(message, com.pressassociation.bus.messages.elements.HttpDestination.class).setTimeout(ImmutableList.of(1L, 2L, 3L));
 
         Assert.assertNotNull(destination.getHttp().getQueryString());
         Assert.assertEquals(1, destination.getHttp().getQueryString().size());
-        Assert.assertEquals("b", destination.getHttp().getQueryString().get("a"));
+        Assert.assertEquals("b", destination.getHttp().getQueryString().get("a").iterator().next());
+
+        Optional<MbElement> destinationElement = destination.find();
+        Assert.assertTrue(destinationElement.isPresent());
+
+        environment.getHttpInput().setQueryString(destination.getHttp().getQueryString());
+        Assert.assertTrue(environment.getHttpInput().exists());
     }
 
     @Test
@@ -130,20 +136,23 @@ public class MbElementWrapperTestCase {
 
     @Test
     public void testCreateDestinationFactory() throws Exception {
-        Assert.assertNull(DestinationFactory.HTTP.tryGet(message).orNull());
+        com.pressassociation.bus.messages.elements.HttpDestination httpDestination = KeyedProxyFactory.create(message, com.pressassociation.bus.messages.elements.HttpDestination.class);
+//        Assert.assertNull(DestinationFactory.HTTP.tryGet(message).orNull());
 
-        HttpDestination httpDestination = DestinationFactory.HTTP.getOrCreateElement(message);
-        httpDestination.setRequestURL("http://a.b.c/path");
+//        HttpDestination httpDestination = DestinationFactory.HTTP.getOrCreateElement(message);
+        httpDestination.setRequestUrl("http://a.b.c/path");
 
         Assert.assertNotNull(DestinationFactory.HTTP.get(message));
         Assert.assertEquals("http://a.b.c/path", DestinationFactory.HTTP.get(message).getValue("RequestURL"));
         Assert.assertEquals("http://a.b.c/path", DestinationFactory.HTTP.get(message).getRequestURL());
 
-        httpDestination.setQueryStringCCSID(CCSID.ASCII);
-        httpDestination.setQueryString(ImmutableMap.of("K1", "V1", "K2", "V2"));
-        Map<String, String> qs = httpDestination.getQueryString();
-        Assert.assertEquals(2, qs.size());
-        Assert.assertEquals("V1", qs.get("K1"));
+        httpDestination.setQueryStringCCSID(CCSID.ASCII.getId());
+        httpDestination.setQueryString(ImmutableMultimap.of("K1", "V1", "K2", "V2", "K3", "V31", "K3", "V32"));
+        Multimap<String, String> qs = httpDestination.getQueryString();
+        Assert.assertEquals(4, qs.size());
+        Collection<?> c = qs.get("K3");
+        Assert.assertEquals(2, c.size());
+        Assert.assertEquals("V31", c.iterator().next());
     }
 
     @Test
