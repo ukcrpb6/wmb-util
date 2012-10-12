@@ -1,24 +1,14 @@
-package com.pressassociation.bus.messages;
+package com.pressassociation.bus.messages.elements;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
-import com.google.common.collect.AbstractIterator;
-import com.google.common.collect.ImmutableMap;
-import com.googlecode.wmbutil.CCSID;
-import com.googlecode.wmbutil.messages.DefaultMbElementWrapper;
-import com.googlecode.wmbutil.messages.MbElementWrapper;
-import com.googlecode.wmbutil.util.HexUtils;
-import com.ibm.broker.plugin.MbElement;
+import com.google.common.collect.Multimap;
 import com.ibm.broker.plugin.MbException;
 import com.pressassociation.bus.data.Key;
 import com.pressassociation.bus.data.KeyRoot;
 import com.pressassociation.bus.data.KeyedData;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-@KeyRoot("/Destination/HTTP")
+@KeyRoot("Destination/HTTP")
 public interface HttpDestination extends KeyedData {
 
     static final String COMPRESSION = "Compression";
@@ -48,15 +38,15 @@ public interface HttpDestination extends KeyedData {
     public void setQueryStringCCSID(int ccsid) throws MbException;
 
     @Key(QUERY_STRING)
-    public Map<String, String> getQueryString() throws MbException;
+    public Multimap<String, String> getQueryString() throws MbException;
 
     @Key(QUERY_STRING)
-    public void setQueryString(Map<String, String> queryString) throws MbException;
+    public void setQueryString(Multimap<String, String> queryString) throws MbException;
 
     @Key(TIMEOUT)
     public void setTimeout(List<Long> timeouts) throws MbException;
 
-    @Key(TIMEOUT)
+    @Key(REQUEST_LINE)
     public RequestLine getRequestLine() throws MbException;
 
     @Key(REQUEST_URL)

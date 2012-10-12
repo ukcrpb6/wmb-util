@@ -1,12 +1,20 @@
 package com.pressassociation.bus.data;
 
-/**
- * Created with IntelliJ IDEA.
- * User: bobb
- * Date: 20/09/2012
- * Time: 22:20
- * To change this template use File | Settings | File Templates.
- */
+import com.google.common.annotations.Beta;
+import com.google.common.base.Optional;
+import com.ibm.broker.plugin.MbElement;
+import com.ibm.broker.plugin.MbException;
+
+import java.util.List;
+
 public interface KeyedData {
-    public boolean exists();
+    public boolean exists() throws MbException;
+
+    public MbElement get() throws MbException;
+
+    @Beta
+    public Optional<MbElement> find() throws MbException;
+
+    @Beta
+    public List<MbElement> findAll() throws MbException;
 }

@@ -1,4 +1,4 @@
-package com.pressassociation.bus.messages;
+package com.pressassociation.bus.messages.elements;
 
 import com.ibm.broker.plugin.MbException;
 import com.pressassociation.bus.data.Key;
