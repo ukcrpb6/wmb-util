@@ -17,6 +17,7 @@ import java.util.Map;
 /**
  * @author Bob Browning <bob.browning@pressassociation.com>
  */
+@Deprecated
 public class HttpDestination extends MbElementWrapper {
 
     private static final String COMPRESSION = "Compression";
@@ -82,7 +83,7 @@ public class HttpDestination extends MbElementWrapper {
         setValue(USE_FOLDER_MODE, useFolderMode);
     }
 
-    public void setQueryString(Map<String, String> queryString) throws MbException {
+    public void setQueryString(Map<String, ?> queryString) throws MbException {
         MbElementWrapper field = getOrCreateField(QUERY_STRING);
         for (String key : queryString.keySet()) {
             field.setValue(key, queryString.get(key));

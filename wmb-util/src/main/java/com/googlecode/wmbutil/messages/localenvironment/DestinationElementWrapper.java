@@ -10,6 +10,7 @@ import com.ibm.broker.plugin.MbException;
 /**
  * @author Bob Browning <bob.browning@pressassociation.com>
  */
+@Deprecated
 public class DestinationElementWrapper extends MbElementWrapper {
 
     public DestinationElementWrapper(MbElement elm) {

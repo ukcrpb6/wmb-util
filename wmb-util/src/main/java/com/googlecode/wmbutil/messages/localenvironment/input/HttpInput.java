@@ -6,6 +6,7 @@ import com.ibm.broker.plugin.MbElement;
 /**
  * @author Bob Browning <bob.browning@pressassociation.com>
  */
+@Deprecated
 public class HttpInput extends MbElementWrapper {
     public HttpInput(MbElement elm) {
         super(elm);

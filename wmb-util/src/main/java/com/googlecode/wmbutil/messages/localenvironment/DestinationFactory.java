@@ -8,6 +8,7 @@ import com.ibm.broker.plugin.MbElement;
 /**
  * @author Bob Browning <bob.browning@pressassociation.com>
  */
+@Deprecated
 public abstract class DestinationFactory<T extends MbElementWrapper> extends MutableElementWrapperFactory<T> {
 
     public static class DefaultDestinationFactory extends DestinationFactory<MbElementWrapper> {

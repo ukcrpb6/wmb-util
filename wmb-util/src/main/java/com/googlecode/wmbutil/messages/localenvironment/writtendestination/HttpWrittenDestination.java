@@ -6,6 +6,7 @@ import com.ibm.broker.plugin.MbElement;
 /**
  * @author Bob Browning <bob.browning@pressassociation.com>
  */
+@Deprecated
 public class HttpWrittenDestination extends MbElementWrapper {
     public HttpWrittenDestination(MbElement elm) {
         super(elm);
