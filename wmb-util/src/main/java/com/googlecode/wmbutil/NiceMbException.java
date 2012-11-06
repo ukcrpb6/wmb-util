@@ -15,6 +15,7 @@
  */
 package com.googlecode.wmbutil;
 
+import com.google.common.base.Objects;
 import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbUserException;
 
@@ -24,20 +25,26 @@ public class NiceMbException extends MbUserException {
 
     private static final long serialVersionUID = -5760540385903728797L;
 
+    private String message;
+
     public NiceMbException(Object source, String msg) {
         super(source.getClass().getName(), "", "", "", msg, new Object[0]);
+        this.message = msg;
     }
 
     public NiceMbException(String msg) {
         super("", "", "", "", msg, new Object[0]);
+        this.message = msg;
     }
 
     public NiceMbException(String msg, Object... parameters) {
         super("", "", "", "", String.format(msg, parameters), new Object[0]);
+        this.message = msg;
     }
 
     private NiceMbException(StackTraceElement element, String msg) {
         super(element.getClassName(), element.getMethodName(), "", "", msg, new Object[0]);
+        this.message = msg;
     }
 
 
@@ -58,4 +65,13 @@ public class NiceMbException extends MbUserException {
         return new NiceMbException(t.getMessage());
     }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("class", getClassName())
+                .add("method", getMethodName())
+                .add("source", getMessageSource())
+                .add("key", getMessageKey())
+                .add("message", message).toString();
+    }
 }
