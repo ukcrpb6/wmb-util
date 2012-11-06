@@ -101,7 +101,7 @@ public abstract class MbElementWrapper {
             //noinspection unchecked
             return (T) elm.getValue();
         } else {
-            throw new NiceMbException("Property not found " + field);
+            throw new NiceMbException("Property not found '" + field + "'");
         }
     }
 

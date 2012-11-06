@@ -5,14 +5,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.googlecode.wmbutil.messages.DefaultMbElementWrapper;
-import com.googlecode.wmbutil.messages.LocalEnvironment;
 import com.googlecode.wmbutil.messages.MbElementWrapper;
-import com.googlecode.wmbutil.messages.localenvironment.DestinationFactory;
-import com.googlecode.wmbutil.messages.localenvironment.destination.HttpDestination;
 import com.ibm.broker.plugin.*;
 import com.ibm.broker.plugin.visitor.DefaultMbMessageVisitor;
 import com.pressassociation.bus.data.KeyedProxyFactory;
+import com.pressassociation.bus.messages.LocalEnvironment;
 import com.pressassociation.bus.messages.elements.Destination;
+import com.pressassociation.bus.messages.elements.HttpDestination;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
@@ -84,7 +83,7 @@ public class MbElementWrapperTestCase {
 
     @Test
     public void testGetFieldValue() throws Exception {
-        Assert.assertNotNull(wrapper.getValue("field"));
+        Assert.assertFalse(wrapper.tryGetValue("field").isPresent());
         wrapper.setValue("field", "value");
         Assert.assertNotNull(wrapper.getValue("field"));
         Assert.assertEquals("value", wrapper.getValue("field"));
@@ -131,20 +130,24 @@ public class MbElementWrapperTestCase {
     public void testDestinationFactory() throws Exception {
         MbMessage message = new MbMessage();
         message.getRootElement().evaluateXPath("?Destination/?HTTP/?RequestURL");
-        Assert.assertNotNull(DestinationFactory.HTTP.tryGet(message).orNull());
+        Assert.assertTrue(KeyedProxyFactory.create(message, HttpDestination.class).exists());
+    }
+
+    private HttpDestination getHttpDestination() throws MbException {
+        return KeyedProxyFactory.create(message, HttpDestination.class);
     }
 
     @Test
     public void testCreateDestinationFactory() throws Exception {
-        com.pressassociation.bus.messages.elements.HttpDestination httpDestination = KeyedProxyFactory.create(message, com.pressassociation.bus.messages.elements.HttpDestination.class);
-//        Assert.assertNull(DestinationFactory.HTTP.tryGet(message).orNull());
+        HttpDestination httpDestination = getHttpDestination();
+        Assert.assertFalse(httpDestination.exists());
 
-//        HttpDestination httpDestination = DestinationFactory.HTTP.getOrCreateElement(message);
+        // Create URL
         httpDestination.setRequestUrl("http://a.b.c/path");
 
-        Assert.assertNotNull(DestinationFactory.HTTP.get(message));
-        Assert.assertEquals("http://a.b.c/path", DestinationFactory.HTTP.get(message).getValue("RequestURL"));
-        Assert.assertEquals("http://a.b.c/path", DestinationFactory.HTTP.get(message).getRequestURL());
+        // Should now exist
+        Assert.assertTrue(httpDestination.exists());
+        Assert.assertEquals("http://a.b.c/path", httpDestination.getRequestUrl());
 
         httpDestination.setQueryStringCCSID(CCSID.ASCII.getId());
         httpDestination.setQueryString(ImmutableMultimap.of("K1", "V1", "K2", "V2", "K3", "V31", "K3", "V32"));
@@ -158,9 +161,12 @@ public class MbElementWrapperTestCase {
     @Test
     public void testRemoveDestinationFactory() throws Exception {
         message.getRootElement().evaluateXPath("?Destination/?HTTP/?RequestURL");
-        Assert.assertNotNull(DestinationFactory.HTTP.tryGet(message).orNull());
-        DestinationFactory.HTTP.remove(message);
-        Assert.assertNull(DestinationFactory.HTTP.tryGet(message).orNull());
+        HttpDestination httpDestination = getHttpDestination();
+        Assert.assertTrue(httpDestination.exists());
+        httpDestination.get().detach();
+        // Required otherwise httpDestination points at detached node
+        httpDestination = getHttpDestination();
+        Assert.assertFalse(httpDestination.exists());
     }
 
     @Test
@@ -170,10 +176,10 @@ public class MbElementWrapperTestCase {
 
         element.get(0).setValue("http://a/b/c");
 
-        Optional<HttpDestination> destination = LocalEnvironment.wrap(message).getDestination().getHTTP();
+        HttpDestination destination = KeyedProxyFactory.create(message, LocalEnvironment.class).getDestination().getHttp();
 
-        Assert.assertTrue(destination.isPresent());
-        Assert.assertEquals("http://a/b/c", destination.get().getRequestURL());
+        Assert.assertTrue(destination.exists());
+        Assert.assertEquals("http://a/b/c", destination.getRequestUrl());
     }
 
     @After

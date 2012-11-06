@@ -8,6 +8,7 @@ import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbMessage;
 import com.ibm.broker.plugin.MbXPath;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -18,74 +19,7 @@ import java.util.Map;
 public class KeyedProxyFactory {
 
     public static final String RELATIVE_SELF = ".";
-
     public static final String EMPTY_PATH = "";
-
-    private static interface XPathable {
-
-        public Object evaluateXPath(String s) throws MbException;
-
-        public Object evaluateXPath(MbXPath mbXPath) throws MbException;
-
-        public MbElement getRootElement() throws MbException;
-
-        public MbMessage getMessage() throws MbException;
-    }
-
-    private static class ForwardingMbMessageXPathable implements XPathable {
-        private final MbMessage message;
-
-        public ForwardingMbMessageXPathable(MbMessage message) {
-            this.message = message;
-        }
-
-        @Override
-        public Object evaluateXPath(String s) throws MbException {
-            return message.evaluateXPath(s);
-        }
-
-        @Override
-        public Object evaluateXPath(MbXPath mbXPath) throws MbException {
-            return message.evaluateXPath(mbXPath);
-        }
-
-        @Override public MbElement getRootElement() throws MbException {
-            return message.getRootElement();
-        }
-
-        @Override public MbMessage getMessage() throws MbException {
-            return message;
-        }
-    }
-
-    private static class ForwardingMbElementXPathable implements XPathable {
-        private final MbMessage message;
-        private final MbElement element;
-
-        public ForwardingMbElementXPathable(MbMessage message, MbElement element) {
-            this.message = message;
-            this.element = element;
-        }
-
-        @Override
-        public Object evaluateXPath(String s) throws MbException {
-            return element.evaluateXPath(s);
-        }
-
-        @Override
-        public Object evaluateXPath(MbXPath mbXPath) throws MbException {
-            return element.evaluateXPath(mbXPath);
-        }
-
-        @Override public MbElement getRootElement() throws MbException {
-            return element;
-        }
-
-        @Override public MbMessage getMessage() throws MbException {
-            return message;
-        }
-
-    }
 
     private static boolean isAbsolutePath(String path) {
         return path.charAt(0) == '/';
@@ -107,7 +41,7 @@ public class KeyedProxyFactory {
             return createProxy(new ForwardingMbElementXPathable(message, elements.get(0)), EMPTY_PATH, proxyClass);
         }
 
-        if(isAbsolutePath(root.value())) {
+        if (isAbsolutePath(root.value())) {
             return createProxy(new ForwardingMbElementXPathable(message, message.getRootElement()), root.value(), proxyClass);
         }
 
@@ -117,14 +51,27 @@ public class KeyedProxyFactory {
         return createProxy(new ForwardingMbElementXPathable(message, message.getRootElement()), root.value(), proxyClass);
     }
 
-    public static String buildPath(String parent, String child) {
+    /**
+     * Create the xpath for a parent and it's child.
+     *
+     * @param parent The parent
+     * @param child The child
+     * @return String path
+     */
+    private static String buildPath(@Nullable String parent, String child) {
         if (parent == null || "".equals(parent)) {
             return child;
         }
         return parent + "/" + child;
     }
 
-    public static String buildCreatePath(String parent, String child) {
+    /**
+     * Create the xpath for a parent and it's child, where nodes will be created if missing.
+     * @param parent
+     * @param child
+     * @return
+     */
+    private static String buildCreatePath(String parent, String child) {
         final String path = buildPath(parent, child);
         return ((path.charAt(0) == '/' || path.charAt(0) == '.') ? "" : "?") + path.replace("/", "/?");
     }
@@ -196,12 +143,12 @@ public class KeyedProxyFactory {
                     //noinspection unchecked
                     for (Map.Entry<String, ?> obj : ((Map<String, ?>) objects[0]).entrySet()) {
                         Object value = obj.getValue();
-                        if(value.getClass().isArray()) {
-                            for(Object o1 : ((Object[]) value)) {
+                        if (value.getClass().isArray()) {
+                            for (Object o1 : ((Object[]) value)) {
                                 aParent.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, obj.getKey(), o1);
                             }
-                        } else if(Collection.class.isAssignableFrom(value.getClass())) {
-                            for(Object o1 : ((Collection<?>) value)) {
+                        } else if (Collection.class.isAssignableFrom(value.getClass())) {
+                            for (Object o1 : ((Collection<?>) value)) {
                                 aParent.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, obj.getKey(), o1);
                             }
                         } else {
@@ -282,8 +229,8 @@ public class KeyedProxyFactory {
                     return relativePath.length() == 0 || !((List<?>) root.evaluateXPath(relativePath)).isEmpty();
                 }
 
-                if("get".equals(method.getName()))  {
-                    if(relativePath.length() > 0) {
+                if ("get".equals(method.getName())) {
+                    if (relativePath.length() > 0) {
                         //noinspection unchecked
                         List<MbElement> elements = ((List<MbElement>) root.evaluateXPath(relativePath));
                         return elements.isEmpty() ? Optional.<MbElement>absent() : Optional.of(elements.get(0));
@@ -293,7 +240,7 @@ public class KeyedProxyFactory {
                 }
 
                 if ("find".equals(method.getName())) {
-                    if(relativePath.length() > 0) {
+                    if (relativePath.length() > 0) {
                         //noinspection unchecked
                         List<MbElement> elements = ((List<MbElement>) root.evaluateXPath(relativePath));
                         return elements.isEmpty() ? Optional.<MbElement>absent() : Optional.of(elements.get(0));
@@ -303,7 +250,7 @@ public class KeyedProxyFactory {
                 }
 
                 if ("findAll".equals(method.getName())) {
-                    if(relativePath.length() > 0) {
+                    if (relativePath.length() > 0) {
                         return root.evaluateXPath(relativePath);
                     } else {
                         // TODO: findAll for rooted elements
@@ -343,5 +290,73 @@ public class KeyedProxyFactory {
                 throw new UnsupportedOperationException();
             }
         });
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    private static interface XPathable {
+
+        public Object evaluateXPath(String s) throws MbException;
+
+        public Object evaluateXPath(MbXPath mbXPath) throws MbException;
+
+        public MbElement getRootElement() throws MbException;
+
+        public MbMessage getMessage() throws MbException;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    private static class ForwardingMbMessageXPathable implements XPathable {
+        private final MbMessage message;
+
+        public ForwardingMbMessageXPathable(MbMessage message) {
+            this.message = message;
+        }
+
+        @Override
+        public Object evaluateXPath(String s) throws MbException {
+            return message.evaluateXPath(s);
+        }
+
+        @Override
+        public Object evaluateXPath(MbXPath mbXPath) throws MbException {
+            return message.evaluateXPath(mbXPath);
+        }
+
+        @Override public MbElement getRootElement() throws MbException {
+            return message.getRootElement();
+        }
+
+        @Override public MbMessage getMessage() throws MbException {
+            return message;
+        }
+    }
+
+    private static class ForwardingMbElementXPathable implements XPathable {
+        private final MbMessage message;
+        private final MbElement element;
+
+        public ForwardingMbElementXPathable(MbMessage message, MbElement element) {
+            this.message = message;
+            this.element = element;
+        }
+
+        @Override
+        public Object evaluateXPath(String s) throws MbException {
+            return element.evaluateXPath(s);
+        }
+
+        @Override
+        public Object evaluateXPath(MbXPath mbXPath) throws MbException {
+            return element.evaluateXPath(mbXPath);
+        }
+
+        @Override public MbElement getRootElement() throws MbException {
+            return element;
+        }
+
+        @Override public MbMessage getMessage() throws MbException {
+            return message;
+        }
+
     }
 }

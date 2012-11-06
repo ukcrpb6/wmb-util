@@ -25,7 +25,6 @@ import com.googlecode.wmbutil.NiceMbException;
 import com.googlecode.wmbutil.messages.configuration.EmailAttachment;
 import com.googlecode.wmbutil.messages.configuration.EmailDestination;
 import com.googlecode.wmbutil.messages.configuration.TimeoutRequest;
-import com.googlecode.wmbutil.messages.localenvironment.DestinationElementWrapper;
 import com.googlecode.wmbutil.util.TypeSafetyHelper;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
@@ -75,20 +74,6 @@ public class LocalEnvironment extends MbElementWrapper {
      */
     public LocalEnvironment(MbElement elm) {
         super(elm);
-    }
-
-    // Destination Element
-
-    public DestinationElementWrapper getDestination() throws MbException {
-        return getField(DESTINATION, DestinationElementWrapper.class);
-    }
-
-    public DestinationElementWrapper getOrCreateDestination() throws MbException {
-        return getOrCreateField(DESTINATION, DestinationElementWrapper.class);
-    }
-
-    public Optional<DestinationElementWrapper> tryGetDestination() throws MbException {
-        return tryGetField(DESTINATION, DestinationElementWrapper.class);
     }
 
     /**
