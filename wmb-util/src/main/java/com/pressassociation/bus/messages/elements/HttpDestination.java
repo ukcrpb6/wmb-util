@@ -24,6 +24,7 @@ public interface HttpDestination extends KeyedData {
     static final String QUERY_STRING = "QueryString";
     static final String REQUEST_LINE = "RequestLine";
     static final String REQUEST_IDENTIFIER = "RequestIdentifier";
+    static final String REPLY_STATUS_CODE = "ReplyStatusCode";
 
     @Key(COMPRESSION)
     public String getCompression() throws MbException;
@@ -105,5 +106,11 @@ public interface HttpDestination extends KeyedData {
 
     @Key(REQUEST_IDENTIFIER)
     public byte[] getRequestIdentifer() throws MbException;
+
+    @Key(REPLY_STATUS_CODE)
+    public int getReplyStatusCode() throws MbException;
+
+    @Key(REPLY_STATUS_CODE)
+    public void setReplyStatusCode(int replyStatusCode) throws MbException;
 
 }
