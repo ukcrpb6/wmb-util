@@ -85,6 +85,16 @@ public class HeaderFactories {
                 }
             };
 
+    public static final AbstractHeaderFactory<MbEmailInputHeader> EMAIL_INPUT_HEADER_FACTORY = new AbstractHeaderFactory<MbEmailInputHeader>() {
+        @Override protected MbHeaderType getHeaderType() {
+            return MbHeaderType.EMAIL;
+        }
+
+        @Override protected MbEmailInputHeader getHeader(MbElement element) throws MbException {
+            return new MbEmailInputHeaderImpl(element);
+        }
+    };
+
     public static final AbstractHeaderFactory<MbMQRFH2Header> MQRFH2_HEADER_FACTORY =
             new AbstractHeaderFactory<MbMQRFH2Header>() {
                 @Override
