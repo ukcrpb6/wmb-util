@@ -12,6 +12,10 @@ public class MbMessageAssemblyBuilder {
     private MbMessage localEnvironment;
     private MbMessage exceptionList;
 
+    public static MbMessageAssemblyBuilder from(MbMessageAssembly assembly) {
+        return new MbMessageAssemblyBuilder(assembly);
+    }
+
     public MbMessageAssemblyBuilder(MbMessageAssembly assembly) {
         this.assembly = Preconditions.checkNotNull(assembly);
     }
