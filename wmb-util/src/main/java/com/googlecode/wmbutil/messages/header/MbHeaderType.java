@@ -15,7 +15,7 @@ public final class MbHeaderType {
 
     public static final MbHeaderType PROPERTIES = new MbHeaderType("PropertiesParser", "Properties");
 
-    public static final MbHeaderType EMAIL = new MbHeaderType("MIME", "MIME");
+    public static final MbHeaderType EMAIL = new MbHeaderType("EmailInputHeader", "EmailInputHeader");
 
     public static final MbHeaderType MQMD = new MbHeaderType(MbMQMD.PARSER_NAME, MbMQMD.ROOT_ELEMENT_NAME);
 
