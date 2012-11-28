@@ -25,7 +25,7 @@
 
     <scm>
         <connection>scm:git:git://github.com/ukcrpb6/wmb-util</connection>
-        <developerConnection>scm:git:git://github.com/ukcrpb6/wmb-util</developerConnection>
+        <developerConnection>scm:git:git@github.com:ukcrpb6/wmb-util.git</developerConnection>
         <url>http://www.github.com/ukcrpb6/wmb-util</url>
     </scm>
 
