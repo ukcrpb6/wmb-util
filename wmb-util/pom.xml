@@ -4,26 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.googlecode.wmbutil</groupId>
+        <groupId>com.pressassociation.bus</groupId>
         <artifactId>wmb-parent</artifactId>
-        <version>0.3.5-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.googlecode.wmbutil</groupId>
     <artifactId>wmb-util</artifactId>
 
     <name>WebSphere Message Broker Extensions - Message Utilities</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-    <scm>
-        <connection>scm:git:git://github.com/ukcrpb6/wmb-util</connection>
-        <developerConnection>scm:git:git://github.com/ukcrpb6/wmb-util</developerConnection>
-        <url>http://www.github.com/ukcrpb6/wmb-util</url>
-    </scm>
 
     <dependencies>
         <!-- Message Broker -->
@@ -97,22 +86,8 @@
 
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>ukcrpb6-maven-repository</id>
-            <url>https://github.com/ukcrpb6/maven-repository/raw/master</url>
-        </repository>
-    </repositories>
-
     <build>
         <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.0.2</version>
