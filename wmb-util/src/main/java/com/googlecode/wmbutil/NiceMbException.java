@@ -16,8 +16,12 @@
 package com.googlecode.wmbutil;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Throwables;
+import com.ibm.broker.plugin.MbBrokerException;
 import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbUserException;
+
+import javax.annotation.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -47,15 +51,27 @@ public class NiceMbException extends MbUserException {
         this.message = msg;
     }
 
-
-    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
-    public static MbException propagateIf(Throwable t) {
-        return (t instanceof MbException) ? (MbException) t : propagate(t);
+    /**
+     * Propagate MbException and MbBrokerException instances.
+     *
+     * @param t - Throwable to be thrown if possible
+     * @throws MbException
+     */
+    public static void propagateIfPossible(@Nullable Throwable t) throws MbException {
+        Throwables.propagateIfPossible(t, MbBrokerException.class);
+        Throwables.propagateIfPossible(t, MbException.class);
     }
 
-    public static NiceMbException propagate(Throwable t) {
+    /**
+     * Propagate an exception, wrapping it as an NiceMbException.
+     *
+     * @param t - Throwable to be propagated as an NiceMbException
+     * @return NiceMbException wrapping the provided throwable
+     */
+    public static MbException propagate(Throwable t) throws MbException {
+        propagateIfPossible(checkNotNull(t));
         //noinspection ThrowableResultOfMethodCallIgnored
-        if (checkNotNull(t).getStackTrace() != null && t.getStackTrace().length > 0) {
+        if (t.getStackTrace() != null && t.getStackTrace().length > 0) {
             StackTraceElement[] st = t.getStackTrace();
             final NiceMbException ex = new NiceMbException(st[0], t.getMessage());
             ex.setStackTrace(st);
