@@ -4,7 +4,7 @@
 
     <groupId>com.pressassociation.bus</groupId>
     <artifactId>wmb-parent</artifactId>
-    <version>0.4.1</version>
+    <version>0.4.2-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -27,7 +27,7 @@
         <connection>scm:git:git://github.com/ukcrpb6/wmb-util</connection>
         <developerConnection>scm:git:git@github.com:ukcrpb6/wmb-util.git</developerConnection>
         <url>http://www.github.com/ukcrpb6/wmb-util</url>
-      <tag>v0.4.1</tag>
+      <tag>HEAD</tag>
   </scm>
     <issueManagement>
         <system>github</system>
