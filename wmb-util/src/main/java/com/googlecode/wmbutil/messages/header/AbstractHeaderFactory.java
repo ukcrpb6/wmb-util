@@ -1,11 +1,11 @@
 package com.googlecode.wmbutil.messages.header;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableSet;
 import com.googlecode.wmbutil.NiceMbException;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbMessage;
+import com.pressassociation.bus.utils.Parsers;
 
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -35,7 +35,7 @@ public abstract class AbstractHeaderFactory<T extends MbHeader> {
 
     protected abstract T getHeader(MbElement element) throws MbException;
 
-    private Set<String> bodyParserClasses = ImmutableSet.of("BLOB", "XML", "XMLNS", "XMLNSC", "MRM", "MIME", "JSON", "DFDL");
+    private final Set<String> bodyParserClasses = Parsers.getBodyParserNameSet();
 
     protected T createHeader(MbMessage message) throws MbException {
         MbElement element = message.getRootElement().getLastChild();

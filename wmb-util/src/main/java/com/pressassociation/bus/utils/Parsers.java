@@ -15,16 +15,11 @@ import java.util.Set;
  */
 public class Parsers {
 
-    public enum BODY_PARSERS {
-        MRM, XMLNSC, XMLNS, XML, SOAP, DataObject, JMSMap, JMSStream, MIME, BLOB, IDOC, JSON, DFDL
-    }
-
     private static Supplier<Set<BODY_PARSERS>> bodyParserSet = Suppliers.memoize(new Supplier<Set<BODY_PARSERS>>() {
         @Override public Set<BODY_PARSERS> get() {
             return Sets.immutableEnumSet(Arrays.asList(BODY_PARSERS.values()));
         }
     });
-
     private static Supplier<Set<String>> bodyParserNameSet = Suppliers.memoize(new Supplier<Set<String>>() {
         @Override public Set<String> get() {
             return ImmutableSet.copyOf(Iterables.transform(getBodyParserSet(), new Function<BODY_PARSERS, String>() {
@@ -41,6 +36,10 @@ public class Parsers {
 
     public static Set<String> getBodyParserNameSet() {
         return bodyParserNameSet.get();
+    }
+
+    public enum BODY_PARSERS {
+        MRM, XMLNSC, XMLNS, XML, SOAP, DataObject, JMSMap, JMSStream, MIME, NONE, IDOC, JSON, DFDL
     }
 
 }
