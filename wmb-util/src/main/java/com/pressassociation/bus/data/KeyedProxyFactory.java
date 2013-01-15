@@ -1,12 +1,10 @@
 package com.pressassociation.bus.data;
 
+import com.google.common.annotations.Beta;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.*;
-import com.ibm.broker.plugin.MbElement;
-import com.ibm.broker.plugin.MbException;
-import com.ibm.broker.plugin.MbMessage;
-import com.ibm.broker.plugin.MbXPath;
+import com.ibm.broker.plugin.*;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationHandler;
@@ -291,6 +289,29 @@ public class KeyedProxyFactory {
             }
         });
     }
+
+    @Beta
+    public <T extends KeyedData> T configureLocalEnvironment(MbMessageAssembly assembly, Configuration<T> configuration,
+   			Class<T> dataClass) throws MbException {
+   		return configure(KeyedProxyFactory.create(assembly.getLocalEnvironment(), dataClass), configuration);
+   	}
+
+    @Beta
+   	public <T extends KeyedData> T configure(MbMessage message, Configuration<T> configuration,
+   			Class<T> dataClass) throws MbException {
+   		return configure(KeyedProxyFactory.create(message, dataClass), configuration);
+   	}
+
+    @Beta
+   	public <T extends KeyedData> T configure(T configurable, Configuration<T> configuration) throws MbException {
+   		configuration.apply(configurable);
+   		return configurable;
+   	}
+
+    @Beta
+   	private static interface Configuration<T extends KeyedData> {
+   		public void apply(T object) throws MbException;
+   	}
 
     @SuppressWarnings("UnusedDeclaration")
     private static interface XPathable {
